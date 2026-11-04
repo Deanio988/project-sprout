@@ -30,6 +30,13 @@ const path = require('node:path');
     if(!await canvas.count())throw Error('Game canvas missing');
     fs.mkdirSync('smoke-output',{recursive:true});
     await canvas.screenshot({path:'smoke-output/outdoor.png'});
+    // The game's draw loop catches errors internally; explicitly inspect its health indicator.
+    const health=await page.locator('#healthStatus').textContent();
+    if(health&&health.includes('⚠️'))throw Error('Game health warning: '+health);
+    await page.evaluate(()=>{if(typeof draw!=='function')throw Error('draw() missing');draw()});
+    const afterDraw=await page.locator('#healthStatus').textContent();
+    if(afterDraw&&afterDraw.includes('⚠️'))throw Error('Game rendering warning: '+afterDraw);
+
     // Exercise visual interpolation directly and ensure the rendered position
     // progresses monotonically without jumping backwards between ticks.
     const motion=await page.evaluate(()=>{
