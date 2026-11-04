@@ -5,9 +5,18 @@ const path = require('node:path');
 (async()=>{
   const errors=[];
   const server=http.createServer((req,res)=>{
-    const file=path.join(process.cwd(),'index.html');
-    res.setHeader('Content-Type','text/html; charset=utf-8');
-    fs.createReadStream(file).pipe(res);
+    const pathname=new URL(req.url,'http://localhost').pathname;
+    const relative=pathname==='/'?'index.html':decodeURIComponent(pathname).replace(/^\/+/, '');
+    const root=process.cwd();
+    const file=path.resolve(root,relative);
+    if(!file.startsWith(root+path.sep)){res.writeHead(403);res.end('Forbidden');return}
+    const ext=path.extname(file);
+    const types={'.html':'text/html; charset=utf-8','.js':'application/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.png':'image/png'};
+    fs.stat(file,(err,stat)=>{
+      if(err||!stat.isFile()){res.writeHead(404);res.end('Not found: '+relative);return}
+      res.setHeader('Content-Type',types[ext]||'application/octet-stream');
+      fs.createReadStream(file).pipe(res);
+    });
   });
   await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
   const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
