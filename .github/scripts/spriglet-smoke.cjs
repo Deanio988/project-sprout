@@ -59,6 +59,32 @@ const path = require('node:path');
     });
     console.log('Movement interpolation samples:',JSON.stringify(motion));
 
+    // Alpha 19: verify the actual in-game interpolation helper and continuity
+    // when a new simulation target arrives before the previous transition finishes.
+    const continuity=await page.evaluate(()=>{
+      if(typeof sproutVisualPosition!=='function')throw Error('Visual movement helper missing');
+      const snapshot={...SPROUT_MOTION};
+      try{
+        const now=performance.now();
+        Object.assign(SPROUT_MOTION,{fromX:100,fromY:90,toX:114,toY:90,updated:now});
+        const halfway=sproutVisualPosition(now+35);
+        if(Math.abs(halfway.x-107)>.01||Math.abs(halfway.y-90)>.01)
+          throw Error('Halfway movement position incorrect');
+        // Model the next simulation update while the previous step is still in flight.
+        const nextTime=now+35;
+        const displayed=sproutVisualPosition(nextTime);
+        Object.assign(SPROUT_MOTION,{fromX:displayed.x,fromY:displayed.y,toX:125,toY:90,updated:nextTime});
+        const nextStart=sproutVisualPosition(nextTime);
+        if(Math.abs(nextStart.x-displayed.x)>.01)
+          throw Error('Position jumps at simulation tick boundary');
+        const quarter=sproutVisualPosition(nextTime+17.5);
+        if(quarter.x<=nextStart.x||quarter.x>=125)
+          throw Error('New movement transition failed to advance smoothly');
+        return {halfway:halfway.x,nextStart:nextStart.x,quarter:quarter.x};
+      }finally{Object.assign(SPROUT_MOTION,snapshot)}
+    });
+    console.log('Movement continuity:',JSON.stringify(continuity));
+
     const state=await page.evaluate(()=>{
       if(typeof pet==='undefined'||typeof draw!=='function')throw Error('Simulation unavailable');
       const initial={x:pet.x,y:pet.y,tick:pet.tick};
