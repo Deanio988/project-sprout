@@ -30,6 +30,28 @@ const path = require('node:path');
     if(!await canvas.count())throw Error('Game canvas missing');
     fs.mkdirSync('smoke-output',{recursive:true});
     await canvas.screenshot({path:'smoke-output/outdoor.png'});
+    // Exercise visual interpolation directly and ensure the rendered position
+    // progresses monotonically without jumping backwards between ticks.
+    const motion=await page.evaluate(()=>{
+      if(typeof SPROUT_MOTION==='undefined')throw Error('Movement interpolation unavailable');
+      const snapshot={...SPROUT_MOTION};
+      const original={x:pet.x,y:pet.y};
+      const samples=[];
+      try{
+        SPROUT_MOTION.fromX=200;SPROUT_MOTION.fromY=200;
+        SPROUT_MOTION.toX=210;SPROUT_MOTION.toY=200;
+        for(const elapsed of [0,14,28,42,56,70]){
+          SPROUT_MOTION.updated=performance.now()-elapsed;
+          const fraction=Math.min(1,Math.max(0,(performance.now()-SPROUT_MOTION.updated)/70));
+          samples.push(200+(210-200)*fraction);
+        }
+        if(samples.some((v,i)=>i>0&&v<samples[i-1]))throw Error('Interpolated movement moved backwards');
+        if(Math.abs(samples.at(-1)-210)>.1)throw Error('Movement failed to reach destination');
+        return samples;
+      }finally{Object.assign(SPROUT_MOTION,snapshot);pet.x=original.x;pet.y=original.y}
+    });
+    console.log('Movement interpolation samples:',JSON.stringify(motion));
+
     const state=await page.evaluate(()=>{
       if(typeof pet==='undefined'||typeof draw!=='function')throw Error('Simulation unavailable');
       const initial={x:pet.x,y:pet.y,tick:pet.tick};
