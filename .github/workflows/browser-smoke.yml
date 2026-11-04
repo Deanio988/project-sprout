@@ -1,0 +1,27 @@
+name: Spriglet browser smoke test
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  browser-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser testing dependencies
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Run game in Chromium and capture screenshots
+        run: node .github/scripts/spriglet-smoke.cjs
+      - name: Save screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: spriglet-browser-screenshots
+          path: smoke-output/
+          if-no-files-found: ignore
