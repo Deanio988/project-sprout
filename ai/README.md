@@ -1,0 +1,4 @@
+# Project Sprout — hybrid inference adapter
+The browser adapter in brain.js supports remote inference via a private HTTPS endpoint and optional WebGPU local inference using WebLLM. Both use the same read-only state snapshot and validated action vocabulary. It does not embed an API key.
+**Not turnkey:** cloud inference requires deploying and configuring the backend, its API key, CORS origin and usage controls. Local inference requires a supported WebGPU browser, compatible model, substantial model download and sufficient device memory. A failed inference does not pretend to be AI.
+Decision validation and movement remain deterministic game-engine responsibilities. For now, the AI controls indoor points of interest when available; the existing outdoor behaviour remains legacy scripted logic until a later integration.
