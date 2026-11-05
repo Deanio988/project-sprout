@@ -23,6 +23,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      - name: Check JavaScript syntax
+        run: |
+          node --check backend/worker.js
+          node --check ai/brain.js
+          node --check chat.js
       - name: Run smoke regression tests
         run: node --test tests/*.test.mjs
       - name: Configure GitHub Pages
