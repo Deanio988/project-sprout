@@ -12,3 +12,8 @@ test('location-specific decisions enforced',()=>assert.match(brain,/validateForS
 test('cloud worker requires rate limit binding',()=>assert.match(worker,/!env\.RATE_LIMITER/));
 test('save export and import are present',()=>{assert.match(html,/exportSave/);assert.match(html,/importSave/)});
 test('speech bubble anchor clamped',()=>assert.match(chat,/Math\.max\(125,Math\.min\(515,a\.x\)\)/));
+
+test('live AI decisions are rechecked against current location',()=>assert.match(html,/Decision outdated after location change/));
+test('Worker exports a single valid handler closure',()=>assert.match(worker,/\}\};\s*$/));
+test('saved state is checked for finite coordinates and tick',()=>assert.match(html,/Invalid saved state/));
+test('AI decision adapter rejects mismatched locations',()=>assert.match(brain,/Action unavailable in current location/));
