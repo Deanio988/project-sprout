@@ -20,5 +20,7 @@ test('AI decision adapter rejects mismatched locations',()=>assert.match(brain,/
 
 test('outdoor movement uses conservative tree avoidance',()=>{assert.match(html,/function sproutSafeOutdoorStep/);assert.match(html,/const next=sproutSafeOutdoorStep\(pet\.x,pet\.y/)});
 
-test('collision uses the same forest positions as renderer',()=>assert.match(html,/const blocked=\(px,py\)=>SPROUT_FOREST_POSITIONS\.some/));
+test('collision uses the same forest positions as renderer',()=>assert.match(html,/for\(const \[tx,ty\] of SPROUT_FOREST_POSITIONS\)/));
 test('sleeping creature snaps to bed station',()=>assert.match(html,/if\(sleeping\)\{motion\.x=stations\.bed\[0\]/));
+
+test('stuck movement selects a fresh goal',()=>{assert.match(html,/pet\.stuckTicks>30/);assert.match(html,/pet\.target=null;pet\.commitUntil=0/)});
