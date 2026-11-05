@@ -29,3 +29,5 @@ test('A-star route planning is used for outdoor navigation',()=>{assert.match(ht
 
 
 test('sleeping sprite anchors to mattress and breathes',()=>{assert.match(html,/const sleepAnchor=\[125,251\]/);assert.match(html,/Math\.sin\(now\/850\)/)});
+
+test('indoor route recovers from mattress collision and stalled walking',()=>{assert.match(html,/if\(!sleeping&&blocked\(motion\.x,motion\.y\)\)/);assert.match(html,/motion\.still>45/);assert.match(html,/bed:\[205,330\]/)});
