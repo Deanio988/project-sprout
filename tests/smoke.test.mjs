@@ -30,12 +30,12 @@ test('A-star route planning is used for outdoor navigation',()=>{assert.match(ht
 
 test('sleeping sprite anchors to mattress and breathes',()=>{assert.match(html,/const sleepAnchor=\[125,251\]/);assert.match(html,/Math\.sin\(now\/850\)/)});
 
-test('indoor route recovers from mattress collision and stalled walking',()=>{assert.match(html,/if\(!sleeping&&blocked\(motion\.x,motion\.y\)\)/);assert.match(html,/motion\.still>45/);assert.match(html,/bed:\[205,330\]/)});
+test('indoor route recovers from mattress collision and stalled walking',()=>{assert.match(html,/if\(!sleeping&&blocked\(motion\.x,motion\.y\)\)/);assert.match(html,/motion\.still>45/);assert.match(html,/bed:\[209,323\]/)});
 
 test('sleeping pose uses a foreground quilt instead of rotated standing sprite',()=>{assert.match(html,/purpose-drawn top-down sleeping pose/);assert.doesNotMatch(html,/ctx\.rotate\(-Math\.PI\/2\)/);assert.match(html,/rr\(89,239,73,57/)});
 
 test('cottage uses reusable native pixel tile atlas',()=>{assert.match(html,/atlas\.width=64;atlas\.height=16/);assert.match(html,/const tile=\(id,x,y\)=>g\.drawImage\(atlas/)});
 
-test('cottage furniture uses a unified pixel sprite atlas',()=>{assert.match(html,/furniture\.width=256;furniture\.height=160/);assert.match(html,/const stamp=\(sx,sy,w,h,x,y\)=>g\.drawImage\(furniture/);assert.match(html,/stamp\(64,0,64,80,31,86\)/)});
+test('cottage furniture uses a unified pixel sprite atlas',()=>{assert.match(html,/furniture\.width=256;furniture\.height=160/);assert.match(html,/const stamp=\(sx,sy,w,h,x,y\)=>g\.drawImage\(furniture/);assert.match(html,/stamp\(64,0,64,80,29,76\)/)});
 
 test('approved cottage layout has central rug, dining stools and bottom doorway',()=>{assert.match(html,/Alpha 56: composition based on the approved cosy cabin concept/);assert.match(html,/Four stools and a central oak table/);assert.match(html,/Bottom doorway and mat/)});
