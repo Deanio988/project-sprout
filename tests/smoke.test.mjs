@@ -28,4 +28,4 @@ test('stuck movement selects a fresh goal',()=>{assert.match(html,/pet\.stuckTic
 test('A-star route planning is used for outdoor navigation',()=>{assert.match(html,/function sproutBuildRoute/);assert.match(html,/function sproutNavigate/);assert.match(html,/const next=sproutNavigate\(pet\.x,pet\.y,o\.x,o\.y,pet\.target\)/)});
 
 
-test('sleeping sprite anchors to mattress and breathes',()=>{assert.match(html,/const sleepAnchor=\[123,251\]/);assert.match(html,/Math\.sin\(now\/850\)/)});
+test('sleeping sprite anchors to mattress and breathes',()=>{assert.match(html,/const sleepAnchor=\[125,251\]/);assert.match(html,/Math\.sin\(now\/850\)/)});
