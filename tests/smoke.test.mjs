@@ -33,3 +33,5 @@ test('sleeping sprite anchors to mattress and breathes',()=>{assert.match(html,/
 test('indoor route recovers from mattress collision and stalled walking',()=>{assert.match(html,/if\(!sleeping&&blocked\(motion\.x,motion\.y\)\)/);assert.match(html,/motion\.still>45/);assert.match(html,/bed:\[205,330\]/)});
 
 test('sleeping pose uses a foreground quilt instead of rotated standing sprite',()=>{assert.match(html,/purpose-drawn top-down sleeping pose/);assert.doesNotMatch(html,/ctx\.rotate\(-Math\.PI\/2\)/);assert.match(html,/rr\(89,239,73,57/)});
+
+test('cottage uses reusable native pixel tile atlas',()=>{assert.match(html,/atlas\.width=64;atlas\.height=16/);assert.match(html,/const tile=\(id,x,y\)=>g\.drawImage\(atlas/)});
