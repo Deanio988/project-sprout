@@ -37,3 +37,5 @@ test('sleeping pose uses a foreground quilt instead of rotated standing sprite',
 test('cottage uses reusable native pixel tile atlas',()=>{assert.match(html,/atlas\.width=64;atlas\.height=16/);assert.match(html,/const tile=\(id,x,y\)=>g\.drawImage\(atlas/)});
 
 test('cottage furniture uses a unified pixel sprite atlas',()=>{assert.match(html,/furniture\.width=256;furniture\.height=160/);assert.match(html,/const stamp=\(sx,sy,w,h,x,y\)=>g\.drawImage\(furniture/);assert.match(html,/stamp\(64,0,64,80,31,86\)/)});
+
+test('approved cottage layout has central rug, dining stools and bottom doorway',()=>{assert.match(html,/Alpha 56: composition based on the approved cosy cabin concept/);assert.match(html,/Four stools and a central oak table/);assert.match(html,/Bottom doorway and mat/)});
