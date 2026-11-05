@@ -350,7 +350,7 @@ function sproutCottageInterior(){
   const image=new Image();window.sproutCottageAsset={image,ready:false,failed:false};
   image.onload=()=>{window.sproutCottageAsset.ready=true};
   image.onerror=()=>{window.sproutCottageAsset.failed=true;const fallback=new Image();fallback.onload=()=>{window.sproutCottageAsset.image=fallback;window.sproutCottageAsset.ready=true};fallback.src='assets/cottage-interior.svg?v=alpha57'};
-  image.src='assets/cottage-approved.png?v=alpha58';
+  image.src='assets/cottage_approved_640x400.png?v=alpha58';
  }
  const cottageAsset=window.sproutCottageAsset;
  if(cottageAsset.ready){
