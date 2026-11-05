@@ -430,8 +430,8 @@ function sproutCottageInterior(){
   if(motion.still>45){motion.routeKey='';motion.route=[];motion.still=0;motion.x=205;motion.y=320}
  }else{motion.still=0;motion.station='bed';motion.visit=0;}
  const indoorX=Math.round(motion.x),indoorY=Math.round(motion.y);
- if(sleeping){
-  // Alpha 52: purpose-drawn top-down sleeping pose, anchored to the pillow.
+ if(sleeping && !cottageAsset.ready){
+  // Legacy sleeping overlay only: approved artwork already contains Spriglet in bed.
   // Keep the creature below the foreground quilt, not a rotated standing sprite.
   const breath=Math.round(Math.sin(now/850)*1.2);
   ctx.save();ctx.imageSmoothingEnabled=false;
