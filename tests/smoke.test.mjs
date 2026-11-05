@@ -17,3 +17,5 @@ test('live AI decisions are rechecked against current location',()=>assert.match
 test('Worker exports a single valid handler closure',()=>assert.match(worker,/\}\};\s*$/));
 test('saved state is checked for finite coordinates and tick',()=>assert.match(html,/Invalid saved state/));
 test('AI decision adapter rejects mismatched locations',()=>assert.match(brain,/Action unavailable in current location/));
+
+test('outdoor movement uses conservative tree avoidance',()=>{assert.match(html,/function sproutSafeOutdoorStep/);assert.match(html,/const next=sproutSafeOutdoorStep\(pet\.x,pet\.y/)});
