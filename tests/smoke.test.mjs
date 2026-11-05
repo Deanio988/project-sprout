@@ -1,0 +1,14 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+const html=readFileSync('index.html','utf8');
+const brain=readFileSync('ai/brain.js','utf8');
+const worker=readFileSync('backend/worker.js','utf8');
+const chat=readFileSync('chat.js','utf8');
+test('visible version matches document title',()=>{const title=html.match(/<title>Project Sprout v([^<]+)/)?.[1];const heading=html.match(/<h1>[^<]*<small>v([^<]+)/)?.[1];assert.equal(title,heading)});
+test('AI requests guard against stale completions',()=>{assert.match(html,/generation!==\(this\.generation\|\|0\)/);assert.match(html,/Decision could not be executed/)});
+test('mobile model preflight is disabled',()=>assert.match(brain,/Local AI is paused on mobile/));
+test('location-specific decisions enforced',()=>assert.match(brain,/validateForState/));
+test('cloud worker requires rate limit binding',()=>assert.match(worker,/!env\.RATE_LIMITER/));
+test('save export and import are present',()=>{assert.match(html,/exportSave/);assert.match(html,/importSave/)});
+test('speech bubble anchor clamped',()=>assert.match(chat,/Math\.max\(125,Math\.min\(515,a\.x\)\)/));
