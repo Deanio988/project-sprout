@@ -92,6 +92,28 @@ const path = require('node:path');
       draw();
       return {initial,homeLevel:pet.homeLevel};
     });
+    // Alpha 70: verify the approved cottage asset loads, and the live sleeping
+    // sprite is used instead of a baked-in background character.
+    await page.waitForFunction(()=>typeof SPROUT_COTTAGE_ASSET!=='undefined' &&
+      (SPROUT_COTTAGE_ASSET.ready||SPROUT_COTTAGE_ASSET.failed),{timeout:10000});
+    const cottage=await page.evaluate(()=>{
+      if(!SPROUT_COTTAGE_ASSET.ready)throw Error('Approved cottage image failed to load');
+      if(SPROUT_COTTAGE_ASSET.image.naturalWidth!==640||SPROUT_COTTAGE_ASSET.image.naturalHeight!==400)
+        throw Error('Cottage image has incorrect dimensions');
+      if(!SPROUT_COTTAGE_ASSET.emptyBed)throw Error('Empty bed layer was not constructed');
+      const previous={sleepUntil:pet.sleepUntil,indoorUntil:pet.indoorUntil};
+      try{
+        pet.sleepUntil=pet.tick+100;pet.indoorUntil=pet.tick+100;draw();
+        const asleep=window.sproutIndoorVisualState;
+        if(!asleep||asleep.station!=='bed')throw Error('Sleeping Spriglet did not enter bed station');
+        pet.sleepUntil=0;pet.indoorUntil=pet.tick+100;draw();
+        const awake=window.sproutIndoorVisualState;
+        if(!awake||!Number.isFinite(awake.x)||!Number.isFinite(awake.y))
+          throw Error('Awake Spriglet position is invalid');
+        return {assetReady:true,bedReady:true,sleepStation:asleep.station,awakePosition:[awake.x,awake.y]};
+      }finally{pet.sleepUntil=previous.sleepUntil;pet.indoorUntil=previous.indoorUntil;draw()}
+    });
+    console.log('Cottage integration:',JSON.stringify(cottage));
     await canvas.screenshot({path:'smoke-output/indoor.png'});
     await page.evaluate(()=>{pet.indoorUntil=0;draw()});
     await page.waitForTimeout(500);
