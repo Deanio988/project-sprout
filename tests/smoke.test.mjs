@@ -39,3 +39,9 @@ test('cottage uses reusable native pixel tile atlas',()=>{assert.match(html,/atl
 test('cottage furniture uses a unified pixel sprite atlas',()=>{assert.match(html,/furniture\.width=256;furniture\.height=160/);assert.match(html,/const stamp=\(sx,sy,w,h,x,y\)=>g\.drawImage\(furniture/);assert.match(html,/stamp\(64,0,64,80,29,76\)/)});
 
 test('approved cottage layout has central rug, dining stools and bottom doorway',()=>{assert.match(html,/Alpha 56: composition based on the approved cosy cabin concept/);assert.match(html,/Four stools and a central oak table/);assert.match(html,/Bottom doorway and mat/)});
+
+test('indoor stuck recovery chooses a nearby walkable grid cell rather than teleporting to the bed',()=>{
+ assert.match(html,/if\(!sleeping&&blocked\(motion\.x,motion\.y\)\)\{const safe=nearest\(motion\.x,motion\.y\)/);
+ assert.match(html,/if\(motion\.still>45\)\{motion\.routeKey='';motion\.route=\[\];motion\.still=0;const safe=nearest\(motion\.x,motion\.y\)/);
+ assert.doesNotMatch(html,/motion\.still=0;motion\.x=205;motion\.y=320/);
+});
