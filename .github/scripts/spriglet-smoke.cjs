@@ -95,7 +95,7 @@ const path = require('node:path');
     // Alpha 70: verify the approved cottage asset loads, and the live sleeping
     // sprite is used instead of a baked-in background character.
     await page.waitForFunction(()=>typeof SPROUT_COTTAGE_ASSET!=='undefined' &&
-      (SPROUT_COTTAGE_ASSET.ready||SPROUT_COTTAGE_ASSET.failed),{timeout:10000});
+      (SPROUT_COTTAGE_ASSET.ready||SPROUT_COTTAGE_ASSET.failed),null,{timeout:10000});
     const cottage=await page.evaluate(()=>{
       if(!SPROUT_COTTAGE_ASSET.ready)throw Error('Approved cottage image failed to load');
       if(SPROUT_COTTAGE_ASSET.image.naturalWidth!==640||SPROUT_COTTAGE_ASSET.image.naturalHeight!==400)
