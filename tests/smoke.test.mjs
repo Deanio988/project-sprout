@@ -45,3 +45,12 @@ test('indoor stuck recovery chooses a nearby walkable grid cell rather than tele
  assert.match(html,/if\(motion\.still>45\)\{motion\.routeKey='';motion\.route=\[\];motion\.still=0;const safe=nearest\(motion\.x,motion\.y\)/);
  assert.doesNotMatch(html,/motion\.still=0;motion\.x=205;motion\.y=320/);
 });
+
+test('indoor activity destinations are projected to walkable cells',()=>{
+ assert.match(html,/const targetCell=nearest\(destination\[0\],destination\[1\]\)/);
+ assert.match(html,/if\(targetCell>=0\)destination=\[px\(targetCell%cols\),py\(Math\.floor\(targetCell\/cols\)\)\]/);
+});
+test('indoor route is recalculated only when the goal changes or recovery clears it',()=>{
+ assert.match(html,/motion\.routeKey!==indoorRouteKey\)\{/);
+ assert.doesNotMatch(html,/motion\.routeKey!==indoorRouteKey\|\|!motion\.route/);
+});
