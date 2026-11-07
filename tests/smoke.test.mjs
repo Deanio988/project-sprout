@@ -54,3 +54,10 @@ test('indoor route is recalculated only when the goal changes or recovery clears
  assert.match(html,/motion\.routeKey!==indoorRouteKey\)\{/);
  assert.doesNotMatch(html,/motion\.routeKey!==indoorRouteKey\|\|!motion\.route/);
 });
+
+test('restored original woodland sprites are referenced by the outdoor renderer',()=>{
+ assert.match(html,/sprites\/woodland_tiles_32px\.png/);
+ assert.match(html,/sprites\/firefly_'\+i\+'\.png/);
+ assert.match(html,/if\(night\)\{const frame=SPROUT_FIREFLY_FRAMES/);
+ assert.match(html,/frame\.complete&&frame\.naturalWidth===32/);
+});
