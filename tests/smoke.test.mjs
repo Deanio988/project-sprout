@@ -111,7 +111,7 @@ test('alpha 77 minimap is collapsible and displays world markers without changin
 test('alpha 78 pond approach trail is represented in terrain and minimap',()=>{
  const segment='[720,455],[758,477],[798,468],[826,442],[826,425]';
  assert.equal(html.split(segment).length-1,2);
- assert.match(html,/3\.0\.0-alpha\.84/);
+ assert.match(html,/3\.0\.0-alpha\.86/);
 });
 
 test('alpha 79 pondside clearing and vegetation are rendered without moving water collision',()=>{
@@ -134,7 +134,7 @@ test('alpha 82 pond uses grid-aligned water and shoreline tiles',()=>{
  assert.match(html,/const edge=!water\(cx-step,cy\)/);
  assert.match(html,/ctx\.fillStyle=edge\?shallow:\(variation/);
  assert.match(html,/Ripples change over time without changing tile collision/);
- assert.match(html,/3\.0\.0-alpha\.84/);
+ assert.match(html,/3\.0\.0-alpha\.86/);
 });
 
 // Removed minor water landmarks must not silently return during woodland changes.
@@ -153,6 +153,13 @@ test('alpha 84 shoreline keeps tile geometry and adds dry-bank transitions',()=>
 
 test('alpha 85 habitat pockets preserve pond collision',()=>{
  assert.match(html,/Alpha 85: tile-aligned, asymmetrical shoreline tufts/);
- assert.match(html,/Keep water footprint identical to navigation collision/);
+ assert.match(html,/The same tile mask now defines water rendering and blocked navigation/);
  assert.match(html,/The western viewing bank stays dry/);
+});
+
+test('alpha 86 shoreline rendering and collision share one tile mask',()=>{
+ assert.match(html,/function sproutPondWaterTile\(tx,ty\)/);
+ assert.match(html,/function sproutPondNavigationWater\(x,y\)/);
+ assert.match(html,/const water=\(cx,cy\)=>sproutPondWaterAt\(cx,cy\)/);
+ assert.match(html,/if\(sproutPondNavigationWater\(x,y\)\)return true/);
 });
