@@ -1,6 +1,6 @@
 # Sunnyside World uploads — intake record (2026-11-08)
 
-**Status: third-party source material, not approved for redistribution or integration.** The uploaded binaries remain outside this public repository. No licence/receipt or author permission has been verified.
+**Status: user reports these were offered as free-to-use downloads and that they made a voluntary donation to the artist.** The specific licence text, attribution requirements and permission to redistribute source sprites have not yet been verified. Uploaded binaries remain outside this public repository until those terms are confirmed.
 
 ## Uploaded inputs
 - `Sunnyside_World_ARCHIVED_ASSETS.zip` — 22 top-level ZIP entries, including 9 ZIP files with matching macOS resource-fork entries, two GIF entries and two PSD entries; ~14.78 MB total uncompressed at outer level. Nested ZIP contents not fully audited.
@@ -20,7 +20,7 @@
 The 32px forest atlas may be a useful **technical and visual reference** for woodland proportions, and the 16px tileset may inform ground-detail density. They are not yet approved for game use. The human animation file is not a Spriglet character sprite.
 
 ## Required before importing any files
-1. Confirm creator and obtain the applicable licence or purchase terms, including public web game use, modification, attribution, and redistribution of raw sprites.
+1. Locate the original creator/download page and confirm the actual free-use terms, including public web game use, modification, attribution, and redistribution of raw sprites. A voluntary donation does not itself establish additional rights.
 2. Identify the precise asset/version covered by that licence.
 3. Check sheet dimensions, transparency, tile layout and original scale.
 4. Build a separate preview; do not silently replace the existing live game assets.
