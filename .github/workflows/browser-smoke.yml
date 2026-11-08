@@ -16,6 +16,8 @@ jobs:
         run: |
           npm install --no-save playwright
           npx playwright install --with-deps chromium
+      - name: Validate art library and gameplay invariants
+        run: node --test tests/art-library.test.mjs
       - name: Run game in Chromium and capture screenshots
         run: node .github/scripts/spriglet-smoke.cjs
       - name: Save screenshots
