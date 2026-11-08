@@ -570,48 +570,47 @@ function sproutDrawPetPixel(night,visualX=pet.x,visualY=pet.y){
  ctx.drawImage(sproutOverworldSprite(night,pet.stage,pet.evolutionPath||'Undecided',SPROUT_FACING,frame,expression),Math.round(visualX-24),Math.round(visualY-53),48,60);ctx.restore()
 }
 // Alpha 75: a large, navigable woodland pond with irregular pixel shoreline.
+// Alpha 82: grid-aligned 16px pond terrain. Geometry is intentionally kept
+// within the existing water collision ellipse until navigation is migrated.
+const SPROUT_POND_TILE=16;
 function sproutLargePond(o,night){
- const x=o.x,y=o.y,t=pet.tick;ctx.save();ctx.imageSmoothingEnabled=false;
- // Draw horizontal pixel bands rather than a smooth canvas ellipse.
- for(let yy=-78;yy<=78;yy+=4){
-  const norm=yy/78,half=Math.floor(110*Math.sqrt(Math.max(0,1-norm*norm))/4)*4;
-  const wobble=Math.round((Math.sin(yy*.14)+Math.cos(yy*.24))*3);
-  const left=x-half+wobble,width=half*2;
-  if(width<4)continue;
-  ctx.fillStyle=night?'#486c56':'#688d63';ctx.fillRect(left-12,y+yy-7,width+24,14);
-  ctx.fillStyle=night?'#a29c77':'#c0b78b';ctx.fillRect(left-7,y+yy-3,width+14,10);
-  // Deep, continuous water body with narrow shallow-water edges.
-  ctx.fillStyle=night?'#214c65':'#226b88';ctx.fillRect(left,y+yy-2,width,8);
-  if(width>24){ctx.fillStyle=night?'#32778b':'#328eab';ctx.fillRect(left+5,y+yy,width-10,5)}
-  if(width>52){ctx.fillStyle=night?'#245c78':'#247a9c';ctx.fillRect(left+16,y+yy+2,width-32,3)}
+ const x=o.x,y=o.y,t=pet.tick,step=SPROUT_POND_TILE;
+ const deep=night?'#23516b':'#286e91',shallow=night?'#35778a':'#3c94af';
+ const shore=night?'#7e896b':'#a6a984',grass=night?'#4c7654':'#71985f';
+ const water=(cx,cy)=>{const dx=(cx-x)/108,dy=(cy-y)/76;return dx*dx+dy*dy<1};
+ ctx.save();ctx.imageSmoothingEnabled=false;
+ // All permanent water and bank geometry is snapped to the world tile grid.
+ for(let ty=Math.floor((y-96)/step);ty<=Math.ceil((y+96)/step);ty++){
+  for(let tx=Math.floor((x-128)/step);tx<=Math.ceil((x+128)/step);tx++){
+   const px=tx*step,py=ty*step,cx=px+8,cy=py+8;
+   const inside=water(cx,cy),near=water(cx+step,cy)||water(cx-step,cy)||water(cx,cy+step)||water(cx,cy-step);
+   if(!inside&&!near)continue;
+   if(!inside){ctx.fillStyle=grass;ctx.fillRect(px,py,step,step);ctx.fillStyle=shore;ctx.fillRect(px+4,py+4,8,8);continue;}
+   const edge=!water(cx-step,cy)||!water(cx+step,cy)||!water(cx,cy-step)||!water(cx,cy+step);
+   ctx.fillStyle=edge?shallow:deep;ctx.fillRect(px,py,step,step);
+   if(edge){ctx.fillStyle=shore;
+    if(!water(cx,cy-step))ctx.fillRect(px,py,step,3);
+    if(!water(cx,cy+step))ctx.fillRect(px,py+13,step,3);
+    if(!water(cx-step,cy))ctx.fillRect(px,py,3,step);
+    if(!water(cx+step,cy))ctx.fillRect(px+13,py,3,step);
+   }else{const seed=(tx*37+ty*53+991)&15;
+    if(seed<4){ctx.fillStyle=night?'#347f97':'#4aa1b8';ctx.fillRect(px+3,py+5,8,2)}
+    if(seed===6||seed===11){ctx.fillStyle=night?'#5e9870':'#80b76d';ctx.fillRect(px+4,py+8,9,5);ctx.fillRect(px+7,py+6,5,2)}
+   }
+  }
  }
- // Dry western bank: a distinct pixel clearing and stepping stones where the path ends.
- ctx.fillStyle=night?'#708361':'#96a16d';
- for(let i=0;i<12;i++){const px=830+(i%4)*9,py=406+Math.floor(i/4)*12;const dx=px-840,dy=py-425;if(dx*dx+dy*dy<580)ctx.fillRect(px,py,8,5)}
- ctx.fillStyle=night?'#96917b':'#b5b096';
- for(const [px,py] of [[842,408],[851,438],[861,416],[837,450]]){ctx.fillRect(px,py,9,5);ctx.fillRect(px+2,py-2,5,2)}
- // Uneven grass clumps and low rushes outside the navigable shoreline.
- for(let i=0;i<20;i++){let a=i*2.399,rx=128+(i%4)*5,ry=96+(i%3)*4,px=Math.round(x+Math.cos(a)*rx),py=Math.round(y+Math.sin(a)*ry);
-  if(px>810&&px<863&&py>390&&py<462)continue;
-  ctx.fillStyle=i%3===0?'#9cae70':'#4f8059';ctx.fillRect(px,py-6,3,9);ctx.fillRect(px+4,py-3,3,6);
+ // Small tile-aligned reeds and stones, outside the water collision area.
+ for(let i=0;i<18;i++){
+  const angle=i*2.39996,px=Math.round((x+Math.cos(angle)*124)/4)*4,py=Math.round((y+Math.sin(angle)*92)/4)*4;
+  if(px>812&&px<872&&py>387&&py<464)continue;
+  ctx.fillStyle=i%4===0?'#9a9c83':'#4e805b';ctx.fillRect(px,py-8,3,10);
+  ctx.fillStyle='#b5a16c';if(i%3===0)ctx.fillRect(px,py-11,3,4);
  }
- // Reeds, stones and lily pads form future habitat attachment points.
- for(let i=0;i<16;i++){let a=i*Math.PI*2/16,px=Math.round(x+Math.cos(a)*116),py=Math.round(y+Math.sin(a)*84);
-  ctx.fillStyle=i%3===0?'#9a9a7e':'#4e7650';ctx.fillRect(px-3,py-2,7,4);
-  if(i%2===0){ctx.fillStyle=night?'#557c56':'#71964e';ctx.fillRect(px,py-13,3,13);ctx.fillRect(px+4,py-9,2,9);ctx.fillStyle='#a38a53';ctx.fillRect(px,py-15,3,5)}
+ // Ripples change over time without changing tile collision or geometry.
+ ctx.fillStyle=night?'#7ab3bb':'#a1d9dc';const frame=Math.floor(t/12)%3;
+ for(let i=0;i<5;i++){let px=Math.round((x-64+i*29)/4)*4,py=Math.round((y-32+(i*17)%65)/4)*4;
+  if(water(px+8,py+8)){ctx.fillRect(px+frame*2,py,8,2)}
  }
- for(let i=0;i<7;i++){let px=x-73+(i*29)%145,py=y-34+(i*19)%65;
-  ctx.fillStyle=night?'#568b73':'#79ac72';ctx.fillRect(px-6,py,12,5);ctx.fillRect(px-4,py-3,8,3);
-  if(i%3===0){ctx.fillStyle='#e8c3cf';ctx.fillRect(px,py-5,4,4)}
- }
- // Shallow highlights and dark pixel contours improve water readability in fog.
- for(let i=0;i<11;i++){let px=x-77+(i*37)%155,py=y-45+(i*23)%91;
-  const q=((px-x)/101)**2+((py-y)/69)**2;if(q>.84)continue;
-  ctx.fillStyle=i%2?(night?'#397f91':'#50acc0'):(night?'#194b68':'#1d6383');
-  ctx.fillRect(px,py,14,3);ctx.fillRect(px+4,py+3,7,2);
- }
- const wave=Math.floor(t/9)%22;ctx.fillStyle=night?'#75b5bc':'#b2e7df';
- for(let i=0;i<6;i++){let px=x-65+(i*31+wave)%130,py=y-40+(i*17)%75;ctx.fillRect(px,py,12,2)}
  ctx.restore();
 }
 function sproutLandmarkPixel(o,night){if(o.type==='large pond'){sproutLargePond(o,night);return;}let x=Math.round(o.x),y=Math.round(o.y),k=o.type,t=pet.tick;let wood=night?'#9b8564':'#d5ae7b',roof=night?'#365a4b':'#437645',roofHi=night?'#648363':'#86ae64',water=night?'#447d89':'#519bad',bright=night?'#80b1b0':'#a1dcd4';function r(a,b,w,h,c){ctx.fillStyle=c;ctx.fillRect(x+a,y+b,w,h)}ctx.save();ctx.imageSmoothingEnabled=false;if(k==='home'){
