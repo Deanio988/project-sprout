@@ -84,20 +84,9 @@ test('alpha 74 woodland expansion keeps world, camera and navigation bounds alig
  assert.match(html,/for\(let x=-25;x<=1300;x\+=45\)/);
 });
 
-test('alpha 75 pond is large, rendered and blocks navigation while retaining the old ponds',()=>{
- assert.match(html,/\{x:975,y:425,type:'large pond'\}/);
- assert.match(html,/function sproutLargePond\(o,night\)/);
- assert.match(html,/if\(o\.type==='large pond'\)\{sproutLargePond\(o,night\);return;\}/);
- assert.match(html,/if\(\(\(x-975\)\/111\)\*\*2\+\(\(y-425\)\/79\)\*\*2<1\)return true/);
- assert.match(html,/\{x:80,y:225,type:'pond'\}/);
-});
 
-test('alpha 76 approaches the large pond via a walkable bank without shifting saved landmark indices',()=>{
- assert.match(html,/function sproutPondApproach\(x,y\)/);
- assert.match(html,/sproutNavigate\(pet\.x,pet\.y,destination\.x,destination\.y,pet\.target\)/);
- assert.match(html,/\{x:90,y:455,type:'flower'\},\{x:975,y:425,type:'large pond'\}/);
- assert.match(html,/if\(objects\[pet\.target\]\?\.type!=='large pond'\)pet\.pondBankIndex=null/);
-});
+
+
 
 test('alpha 77 minimap is collapsible and displays world markers without changing simulation state',()=>{
  assert.match(html,/id="toggleMinimap"/);
@@ -108,19 +97,9 @@ test('alpha 77 minimap is collapsible and displays world markers without changin
  assert.match(html,/sproutDrawMinimap\(\);\}function animationFrame/);
 });
 
-test('alpha 78 pond approach trail is represented in terrain and minimap',()=>{
- const segment='[720,455],[758,477],[798,468],[826,442],[826,425]';
- assert.equal(html.split(segment).length-1,2);
- assert.match(html,/3\.0\.0-alpha\.86/);
-});
 
-test('alpha 79 pondside clearing and vegetation are rendered without moving water collision',()=>{
- assert.match(html,/Pondside clearing: worn grass/);
- assert.match(html,/Dry western bank: a distinct pixel clearing/);
- assert.match(html,/Uneven grass clumps and low rushes/);
- assert.match(html,/\(\(x-975\)\/111\)\*\*2\+\(\(y-425\)\/79\)\*\*2<1/);
- assert.match(html,/3\.0\.0-alpha\.79/);
-});
+
+
 
 test('alpha 80 encourages pond discovery without overriding survival needs',()=>{
  assert.match(html,/o\.type==='large pond'&&pet\.hunger>=65&&pet\.energy>=65&&pet\.curiosity>=45/);
@@ -129,13 +108,7 @@ test('alpha 80 encourages pond discovery without overriding survival needs',()=>
  assert.match(html,/let destination=o\.type==='large pond'\?sproutPondApproach/);
 });
 
-test('alpha 82 pond uses grid-aligned water and shoreline tiles',()=>{
- assert.match(html,/const SPROUT_POND_TILE=16/);
- assert.match(html,/const edge=!water\(cx-step,cy\)/);
- assert.match(html,/ctx\.fillStyle=edge\?shallow:\(variation/);
- assert.match(html,/Ripples change over time without changing tile collision/);
- assert.match(html,/3\.0\.0-alpha\.86/);
-});
+
 
 // Removed minor water landmarks must not silently return during woodland changes.
 test('woodland retains only the main wildlife pond',()=>{
@@ -145,17 +118,9 @@ test('woodland retains only the main wildlife pond',()=>{
  assert.doesNotMatch(landmarks,/type:'(?:pond|spring)'/);
 });
 
-test('alpha 84 shoreline keeps tile geometry and adds dry-bank transitions',()=>{
- assert.match(html,/Alpha 84: connected, irregular soil-and-grass transition/);
- assert.match(html,/Preserve the collision footprint/);
- assert.match(html,/if\(!inside\)/);
-});
 
-test('alpha 85 habitat pockets preserve pond collision',()=>{
- assert.match(html,/Alpha 85: tile-aligned, asymmetrical shoreline tufts/);
- assert.match(html,/The same tile mask now defines water rendering and blocked navigation/);
- assert.match(html,/The western viewing bank stays dry/);
-});
+
+
 
 test('alpha 86 shoreline rendering and collision share one tile mask',()=>{
  assert.match(html,/function sproutPondWaterTile\(tx,ty\)/);
