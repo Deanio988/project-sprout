@@ -135,3 +135,11 @@ test('alpha 81 pond retains shoreline habitat with deeper pixel water',()=>{
  assert.match(html,/Dry western bank: a distinct pixel clearing/);
  assert.match(html,/3\.0\.0-alpha\.81/);
 });
+
+// Removed minor water landmarks must not silently return during woodland changes.
+test('woodland retains only the main wildlife pond',()=>{
+ const landmarks=html.match(/const objects=\[([\s\S]*?)\],key=/)?.[1];
+ assert.ok(landmarks,'woodland landmark definitions found');
+ assert.equal((landmarks.match(/type:'large pond'/g)||[]).length,1);
+ assert.doesNotMatch(landmarks,/type:'(?:pond|spring)'/);
+});
