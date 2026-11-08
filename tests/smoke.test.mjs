@@ -98,3 +98,12 @@ test('alpha 76 approaches the large pond via a walkable bank without shifting sa
  assert.match(html,/\{x:90,y:455,type:'flower'\},\{x:975,y:425,type:'large pond'\}/);
  assert.match(html,/if\(objects\[pet\.target\]\?\.type!=='large pond'\)pet\.pondBankIndex=null/);
 });
+
+test('alpha 77 minimap is collapsible and displays world markers without changing simulation state',()=>{
+ assert.match(html,/id="toggleMinimap"/);
+ assert.match(html,/id="woodlandMinimap" hidden/);
+ assert.match(html,/function sproutDrawMinimap\(\)/);
+ assert.match(html,/o\.type==='large pond'/);
+ assert.match(html,/SPROUT_CAMERA\.x\?\?/);
+ assert.match(html,/sproutDrawMinimap\(\);\}function animationFrame/);
+});
