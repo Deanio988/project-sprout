@@ -553,7 +553,7 @@ const SPROUT_CAMERA_CONTROL={mode:'follow',drag:null};
 const SPROUT_VIEW=document.querySelector('#game');
 function sproutCameraClamp(){SPROUT_CAMERA.x=Math.max(0,Math.min(WOOD_COLS*WOOD_TILE-640,SPROUT_CAMERA.x??0));SPROUT_CAMERA.y=Math.max(0,Math.min(WOOD_ROWS*WOOD_TILE-400,SPROUT_CAMERA.y??0));}
 for(const [id,mode] of [['cameraExplore','explore'],['cameraPond','pond'],['cameraFollow','follow']])document.querySelector('#'+id).addEventListener('click',()=>{SPROUT_CAMERA_CONTROL.mode=mode;SPROUT_CAMERA_CONTROL.drag=null;SPROUT_VIEW.style.touchAction=mode==='explore'?'none':'pan-y';if(mode==='pond'){SPROUT_CAMERA.x=655;SPROUT_CAMERA.y=225;sproutCameraClamp();}if(mode==='follow'){SPROUT_CAMERA.x=null;SPROUT_CAMERA.y=null;}});
-SPROUT_VIEW.addEventListener('pointerdown',e=>{if(SPROUT_CAMERA_CONTROL.mode!=='explore'||pet.sleepUntil>pet.tick||pet.indoorUntil>pet.tick)return;SPROUT_CAMERA_CONTROL.drag={id:e.pointerId,x:e.clientX,y:e.clientY};SPROUT_VIEW.setPointerCapture(e.pointerId);});
+SPROUT_VIEW.addEventListener('pointerdown',e=>{if(SPROUT_CAMERA_CONTROL.mode!=='explore')return;SPROUT_CAMERA_CONTROL.drag={id:e.pointerId,x:e.clientX,y:e.clientY};SPROUT_VIEW.setPointerCapture(e.pointerId);});
 SPROUT_VIEW.addEventListener('pointermove',e=>{const d=SPROUT_CAMERA_CONTROL.drag;if(!d||d.id!==e.pointerId)return;const bounds=SPROUT_VIEW.getBoundingClientRect();SPROUT_CAMERA.x-=(e.clientX-d.x)*640/bounds.width;SPROUT_CAMERA.y-=(e.clientY-d.y)*400/bounds.height;sproutCameraClamp();d.x=e.clientX;d.y=e.clientY;});
 for(const event of ['pointerup','pointercancel','lostpointercapture'])SPROUT_VIEW.addEventListener(event,()=>{SPROUT_CAMERA_CONTROL.drag=null;});
 
