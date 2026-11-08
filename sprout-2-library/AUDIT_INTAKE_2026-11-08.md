@@ -3,9 +3,9 @@
 **Status: inventory generated locally; visual approval pending. No map/gameplay work authorised.**
 
 ## Audit scope
-The new chat supplied 9 ZIP archives plus 1 PSD and 1 GIF. The audit captured 4,403 file entries, including 3,748 readable PNG/GIF/etc images and 843 distinct image-content hashes. Some entries represent exported GameMaker sprite frames, duplicates, or development metadata. Archive directory names, SHA-256, dimensions, preliminary categories and inferred animation frames were captured in a local CSV.
+The new chat supplied 9 ZIP archives plus 1 PSD and 1 GIF. The audit captured 4,403 file entries, including 3,748 readable PNG/GIF/etc images and 1,544 distinct readable image-content hashes. Some entries represent exported GameMaker sprite frames, duplicates, or development metadata. Archive directory names, SHA-256, dimensions, preliminary categories and inferred animation frames were captured in a local CSV.
 
-The **private downloadable audit bundle** supplied in the conversation contains `inventory.csv`, `audit_summary.json`, and 21 non-exhaustive visual contact sheets. **It is intentionally not committed to this public repository**, because licensing for redistributing full third-party sprite previews has not been verified.
+The **private downloadable audit bundle** supplied in the conversation contains `inventory.csv`, `audit_summary.json`, and 43 complete visual contact sheets covering all 1,544 distinct images. **It is intentionally not committed to this public repository**, because licensing for redistributing full third-party sprite previews has not been verified.
 
 ## Sources examined
 - `BETA Sunnyside World - Tileset_GameMaker.zip`
