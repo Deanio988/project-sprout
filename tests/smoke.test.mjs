@@ -51,7 +51,7 @@ test('indoor activity destinations are projected to walkable cells',()=>{
  assert.match(html,/if\(targetCell>=0\)destination=\[px\(targetCell%cols\),py\(Math\.floor\(targetCell\/cols\)\)\]/);
 });
 test('indoor route is recalculated only when the goal changes or recovery clears it',()=>{
- assert.match(html,/motion\.routeKey!==indoorRouteKey\)\{/);
+ assert.match(html,/if\(!sleeping&&\(motion\.routeKey!==indoorRouteKey\)\)\{/);
  assert.doesNotMatch(html,/motion\.routeKey!==indoorRouteKey\|\|!motion\.route/);
 });
 
