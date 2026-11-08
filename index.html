@@ -28,7 +28,7 @@ const SPROUT_NAV_CELL=20,SPROUT_NAV_COLS=60,SPROUT_NAV_ROWS=35;
 let sproutRoute=null;
 // Alpha 76: deterministic shoreline approach; never navigate to the pond's blocked centre.
 function sproutPondApproach(x,y){
- const sites=[{x:975,y:315},{x:1110,y:425},{x:975,y:535},{x:840,y:425}];
+ const sites=[{x:975,y:315},{x:1210,y:425},{x:975,y:615},{x:840,y:425}];
  // Pick the closest bank to Spriglet and retain it for the current visit.
  const i=pet.pondBankIndex;
  if(Number.isInteger(i)&&i>=0&&i<sites.length&&pet.target===objects.length-1)return sites[i];
@@ -583,7 +583,7 @@ function sproutDrawPetPixel(night,visualX=pet.x,visualY=pet.y){
 const SPROUT_POND_TILE=16;
 // Alpha 86: one deterministic tile mask drives both visible water and navigation.
 function sproutPondWaterTile(tx,ty){
- const cx=tx*16+8,cy=ty*16+8,dx=(cx-975)/108,dy=(cy-425)/76;
+ const cx=tx*16+8,cy=ty*16+8,dx=(cx-975)/(cx<975?108:205),dy=(cy-425)/(cy<425?76:155);
  const wobble=0.10*Math.sin((cy-425)/23)+0.075*Math.sin((cx-975)/29);
  const inlet=(cx<930&&cy>415&&cy<461)?0.12:0;
  return dx*dx+dy*dy<1+wobble-inlet;
@@ -603,8 +603,8 @@ function sproutLargePond(o,night){
  // The same tile mask now defines water rendering and blocked navigation.
  ctx.save();ctx.imageSmoothingEnabled=false;
  // All permanent water and bank geometry is snapped to the world tile grid.
- for(let ty=Math.floor((y-96)/step);ty<=Math.ceil((y+96)/step);ty++){
-  for(let tx=Math.floor((x-128)/step);tx<=Math.ceil((x+128)/step);tx++){
+ for(let ty=Math.floor((y-112)/step);ty<=Math.ceil((y+176)/step);ty++){
+  for(let tx=Math.floor((x-128)/step);tx<=Math.ceil((x+224)/step);tx++){
    const px=tx*step,py=ty*step,cx=px+8,cy=py+8;
    const inside=water(cx,cy),near=water(cx+step,cy)||water(cx-step,cy)||water(cx,cy+step)||water(cx,cy-step);
    if(!inside&&!near)continue;
