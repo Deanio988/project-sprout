@@ -111,7 +111,7 @@ test('alpha 77 minimap is collapsible and displays world markers without changin
 test('alpha 78 pond approach trail is represented in terrain and minimap',()=>{
  const segment='[720,455],[758,477],[798,468],[826,442],[826,425]';
  assert.equal(html.split(segment).length-1,2);
- assert.match(html,/3\.0\.0-alpha\.78/);
+ assert.match(html,/3\.0\.0-alpha\.79/);
 });
 
 test('alpha 79 pondside clearing and vegetation are rendered without moving water collision',()=>{
