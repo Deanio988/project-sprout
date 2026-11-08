@@ -19,7 +19,8 @@ Central catalogue for the game's original artwork, reusable assets, visual direc
 
 - [Visual style guide](STYLE_GUIDE.md): palette, scale, terrain, architecture and quality rules.
 - [Reference catalogue](REFERENCES.md): external artists and inspiration, with licensing cautions.
-- [Asset manifest](ASSET_MANIFEST.md): paths, intended use and verification status.
+- [Asset manifest](ASSET_MANIFEST.md): verified paths, dimensions, file sizes and verification status.
+- [Woodland tileset specification](WOODLAND_TILESET_SPEC.md): original production asset batches and acceptance criteria.
 
 ## Working rules
 
