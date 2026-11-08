@@ -91,3 +91,10 @@ test('alpha 75 pond is large, rendered and blocks navigation while retaining the
  assert.match(html,/if\(\(\(x-975\)\/111\)\*\*2\+\(\(y-425\)\/79\)\*\*2<1\)return true/);
  assert.match(html,/\{x:80,y:225,type:'pond'\}/);
 });
+
+test('alpha 76 approaches the large pond via a walkable bank without shifting saved landmark indices',()=>{
+ assert.match(html,/function sproutPondApproach\(x,y\)/);
+ assert.match(html,/sproutNavigate\(pet\.x,pet\.y,destination\.x,destination\.y,pet\.target\)/);
+ assert.match(html,/\{x:90,y:455,type:'flower'\},\{x:975,y:425,type:'large pond'\}/);
+ assert.match(html,/if\(objects\[pet\.target\]\?\.type!=='large pond'\)pet\.pondBankIndex=null/);
+});
