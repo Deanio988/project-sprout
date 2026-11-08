@@ -113,3 +113,11 @@ test('alpha 78 pond approach trail is represented in terrain and minimap',()=>{
  assert.equal(html.split(segment).length-1,2);
  assert.match(html,/3\.0\.0-alpha\.78/);
 });
+
+test('alpha 79 pondside clearing and vegetation are rendered without moving water collision',()=>{
+ assert.match(html,/Pondside clearing: worn grass/);
+ assert.match(html,/Dry western bank: a distinct pixel clearing/);
+ assert.match(html,/Uneven grass clumps and low rushes/);
+ assert.match(html,/\(\(x-975\)\/111\)\*\*2\+\(\(y-425\)\/79\)\*\*2<1/);
+ assert.match(html,/3\.0\.0-alpha\.79/);
+});
