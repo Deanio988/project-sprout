@@ -73,3 +73,13 @@ test('alpha 73 avoids checkerboard by using a single grass base tile',()=>{
  assert.doesNotMatch(html,/const atlasTile=woodlandTileHash\(Math\.floor\(tx\/2\),Math\.floor\(ty\/2\)\)%4/);
  assert.match(html,/if\(h%17===0&&woodlandPathDistance\(x\+8,y\+8\)>32\)/);
 });
+
+test('alpha 74 woodland expansion keeps world, camera and navigation bounds aligned',()=>{
+ assert.match(html,/WOOD_TILE=16,WOOD_COLS=80,WOOD_ROWS=50/);
+ assert.match(html,/SPROUT_NAV_CELL=20,SPROUT_NAV_COLS=60,SPROUT_NAV_ROWS=35/);
+ assert.match(html,/x>1245\|\|y<48\|\|y>765/);
+ assert.match(html,/WOOD_COLS\*WOOD_TILE-640,visualX-320/);
+ assert.match(html,/WOOD_ROWS\*WOOD_TILE-400,visualY-200/);
+ assert.match(html,/layer\.width=WOOD_COLS\*WOOD_TILE;layer\.height=WOOD_ROWS\*WOOD_TILE/);
+ assert.match(html,/for\(let x=-25;x<=1300;x\+=45\)/);
+});
