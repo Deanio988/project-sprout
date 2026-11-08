@@ -129,10 +129,11 @@ test('alpha 80 encourages pond discovery without overriding survival needs',()=>
  assert.match(html,/let destination=o\.type==='large pond'\?sproutPondApproach/);
 });
 
-test('alpha 81 pond retains shoreline habitat with deeper pixel water',()=>{
- assert.match(html,/Deep, continuous water body with narrow shallow-water edges/);
- assert.match(html,/Shallow highlights and dark pixel contours improve water readability in fog/);
- assert.match(html,/Dry western bank: a distinct pixel clearing/);
+test('alpha 82 pond uses grid-aligned water and shoreline tiles',()=>{
+ assert.match(html,/const SPROUT_POND_TILE=16/);
+ assert.match(html,/const edge=!water\(cx-step,cy\)/);
+ assert.match(html,/ctx\.fillStyle=edge\?shallow:deep/);
+ assert.match(html,/Ripples change over time without changing tile collision/);
  assert.match(html,/3\.0\.0-alpha\.81/);
 });
 
