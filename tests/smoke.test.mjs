@@ -83,3 +83,11 @@ test('alpha 74 woodland expansion keeps world, camera and navigation bounds alig
  assert.match(html,/layer\.width=WOOD_COLS\*WOOD_TILE;layer\.height=WOOD_ROWS\*WOOD_TILE/);
  assert.match(html,/for\(let x=-25;x<=1300;x\+=45\)/);
 });
+
+test('alpha 75 pond is large, rendered and blocks navigation while retaining the old ponds',()=>{
+ assert.match(html,/\{x:975,y:425,type:'large pond'\}/);
+ assert.match(html,/function sproutLargePond\(o,night\)/);
+ assert.match(html,/if\(o\.type==='large pond'\)\{sproutLargePond\(o,night\);return;\}/);
+ assert.match(html,/if\(\(\(x-975\)\/111\)\*\*2\+\(\(y-425\)\/79\)\*\*2<1\)return true/);
+ assert.match(html,/\{x:80,y:225,type:'pond'\}/);
+});
