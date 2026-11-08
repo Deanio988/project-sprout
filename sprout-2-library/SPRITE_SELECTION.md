@@ -27,7 +27,7 @@ Both definitions are in `BETA Sunnyside World - Tileset_GameMaker.zip`, under `S
 | Ambient effects | `SUNNYSIDE_WORLD_CHIMNEYSMOKE_v1.0.zip`, `leaves_hit (1).gif` | mixed | Candidate; confirm frame timing |
 
 ## Tile coordinate rule
-For an atlas with grid size `t` and `C` columns, tile ID `i` corresponds to `x=(i%C)*t`, `y=floor(i/C)*t` **only after confirming GameMaker's tile-ID indexing semantics**. Source texture padding/export atlas border must not be mistaken for grid spacing. Source coordinates should be validated against source sprite and not blindly applied to packed `output_tileset.png`.
+**Validated source indexing:** tile ID `0` is blank. For nonzero tile ID `i`, `x=((i-1)%C)*t`, `y=floor((i-1)/C)*t`, where `C` is the **source PNG's** column count (64 for main, 10 for forest), not GameMaker's packed `out_columns` (64 and 13 respectively). Source texture padding/export atlas border must not be mistaken for grid spacing. Source coordinates should be validated against source sprite and not blindly applied to packed `output_tileset.png`.
 
 ## Unresolved
 - Large closed pond with every shore direction and corners: **unverified**; `River` does not prove it.
@@ -38,3 +38,7 @@ For an atlas with grid size `t` and `C` columns, tile ID `i` corresponds to `x=(
 - Licensing terms for public redistribution of derived complete galleries unverified.
 
 **Next gate:** user reviews the original atlases and selects preferred `Path 01–03`, forest and cottage styles. No map until approval.
+
+## 2026-11-08 detailed validation
+
+Source PNGs are 1024×1024 (main, 64×64 source cells of 16px) and 320×576 (forest, 10×18 source cells of 32px). There are **183 nonzero autotile entries** across 12 GameMaker-defined groups (with 9 zero/blank entries). A private local review package contains per-group tile sheets labelled with ID and exact source x/y plus a CSV recording dimensions and alpha bounds. These sheets are individual source tiles, **not** proof of seamless assembled joins. The large pond, furnished cottage interior and wildlife remain unresolved. No map created.
