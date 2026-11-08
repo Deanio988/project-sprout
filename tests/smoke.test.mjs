@@ -150,3 +150,9 @@ test('alpha 84 shoreline keeps tile geometry and adds dry-bank transitions',()=>
  assert.match(html,/Preserve the collision footprint/);
  assert.match(html,/if\(!inside\)/);
 });
+
+test('alpha 85 habitat pockets preserve pond collision',()=>{
+ assert.match(html,/Alpha 85: tile-aligned, asymmetrical shoreline tufts/);
+ assert.match(html,/Keep water footprint identical to navigation collision/);
+ assert.match(html,/The western viewing bank stays dry/);
+});
