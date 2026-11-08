@@ -111,7 +111,7 @@ test('alpha 77 minimap is collapsible and displays world markers without changin
 test('alpha 78 pond approach trail is represented in terrain and minimap',()=>{
  const segment='[720,455],[758,477],[798,468],[826,442],[826,425]';
  assert.equal(html.split(segment).length-1,2);
- assert.match(html,/3\.0\.0-alpha\.81/);
+ assert.match(html,/3\.0\.0-alpha\.82/);
 });
 
 test('alpha 79 pondside clearing and vegetation are rendered without moving water collision',()=>{
@@ -132,7 +132,7 @@ test('alpha 80 encourages pond discovery without overriding survival needs',()=>
 test('alpha 82 pond uses grid-aligned water and shoreline tiles',()=>{
  assert.match(html,/const SPROUT_POND_TILE=16/);
  assert.match(html,/const edge=!water\(cx-step,cy\)/);
- assert.match(html,/ctx\.fillStyle=edge\?shallow:deep/);
+ assert.match(html,/ctx\.fillStyle=edge\?shallow:\(variation/);
  assert.match(html,/Ripples change over time without changing tile collision/);
  assert.match(html,/3\.0\.0-alpha\.81/);
 });
