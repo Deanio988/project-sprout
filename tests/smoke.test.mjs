@@ -61,3 +61,10 @@ test('restored original woodland sprites are referenced by the outdoor renderer'
  assert.match(html,/if\(night\)\{const frame=SPROUT_FIREFLY_FRAMES/);
  assert.match(html,/frame\.complete&&frame\.naturalWidth===32/);
 });
+
+test('alpha 72 outdoor terrain uses restored original atlas with fallback and cache refresh',()=>{
+ assert.match(html,/SPROUT_WOODLAND_ATLAS\.naturalWidth===256&&SPROUT_WOODLAND_ATLAS\.naturalHeight===128/);
+ assert.match(html,/ctx\.drawImage\(SPROUT_WOODLAND_ATLAS,atlasTile\*32,0,32,32,x,y,16,16\)/);
+ assert.match(html,/else ctx\.drawImage\(sproutArtTile\(h%9===0\?'grassDetail':'grass',night\),x,y\)/);
+ assert.match(html,/SPROUT_WOODLAND_ATLAS\.onload=\(\)=>\{SPROUT_TERRAIN_CACHE\.day=null;SPROUT_TERRAIN_CACHE\.night=null\}/);
+});
