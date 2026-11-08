@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Project Sprout — Expanded Woodland Study</title>
+<style>body{margin:0;background:#14251e;color:#e9f0dc;font:15px system-ui}header{max-width:1180px;margin:auto;padding:16px}h1{margin:0 0 6px;font-size:24px}p{margin:4px 0 12px;color:#b6ccb8}nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}button{background:#355846;color:white;border:1px solid #749777;border-radius:7px;padding:8px 12px;cursor:pointer}button:focus-visible{outline:3px solid #e7cf8d}canvas{width:100%;image-rendering:pixelated;background:#71975b;border:3px solid #607d5a;touch-action:none;display:block}main{max-width:1180px;margin:auto;padding:0 16px 20px}small{color:#adc7b2}</style>
+<header><h1>Project Sprout · The Great Woodland</h1><p>Extensive standalone environment build · original procedural terrain using the existing Project Sprout atlas · no changes to the live simulation</p><nav><button id="day">Day / night</button><button id="reset">Reset view</button><button id="labels">Landmark labels</button><button id="zoomIn">Zoom +</button><button id="zoomOut">Zoom −</button></nav></header><main><canvas id="world" width="1152" height="672" aria-label="Pan and zoom woodland map"></canvas><p><small>Drag to explore · scroll or buttons to zoom · woodland map 1792 × 1152 · single main pond · cottage clearing, ancient grove, glades, meadow, orchard and woodland trails</small></p></main>
+<script>
+const c=document.querySelector('#world'),g=c.getContext('2d');g.imageSmoothingEnabled=false;
+const W=1792,H=1152,T=32;let night=false,labels=true,zoom=.9,cx=830,cy=520;
+const atlas=new Image();atlas.src='../sprites/woodland_tiles_32px.png';atlas.onload=draw;
+const cottage=new Image();cottage.src='../assets/cottage_approved_640x400.png';cottage.onload=draw;
+const hash=(x,y,s=0)=>{let n=Math.imul(x+117,374761393)^Math.imul(y+313,668265263)^Math.imul(s+7,1274126177);n=Math.imul(n^(n>>>13),1274126177);return ((n^(n>>>16))>>>0)/4294967296};
+const trail=[[420,245],[450,325],[530,420],[650,495],[770,530],[900,570],[1040,630],[1190,720],[1320,740],[1450,690],[1570,625]];
+const branches=[[[780,535],[700,650],[610,740],[480,830],[360,940]],[[1040,630],[1080,490],[1180,390],[1330,330],[1500,280]],[[1190,720],[1180,870],[1290,980],[1450,1040]]];
+const pond={x:1510,y:665,rx:150,ry:115};
+const landmarks=[{x:420,y:245,name:'Cottage clearing'},{x:630,y:800,name:'Old root grove'},{x:1290,y:345,name:'Fern glade'},{x:1530,y:660,name:'Great pond'},{x:1320,y:965,name:'Wildflower meadow'},{x:360,y:935,name:'Mossy hollow'}];
+function distSeg(x,y,a,b){let dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy||1)));return Math.hypot(x-a[0]-t*dx,y-a[1]-t*dy)}
+function trailDist(x,y){let d=1e9;for(let line of [trail,...branches])for(let i=1;i<line.length;i++)d=Math.min(d,distSeg(x,y,line[i-1],line[i]));return d}
+function water(x,y){let dx=(x-pond.x)/pond.rx,dy=(y-pond.y)/pond.ry;return dx*dx+dy*dy+Math.sin(x/21)*.055+Math.sin(y/29)*.065<1}
+function path(ctx,pts,w,color){ctx.beginPath();ctx.moveTo(...pts[0]);for(let i=1;i<pts.length;i++)ctx.lineTo(...pts[i]);ctx.lineWidth=w;ctx.lineJoin='round';ctx.lineCap='round';ctx.strokeStyle=color;ctx.stroke()}
+function tile(x,y,sx,sy){if(atlas.complete&&atlas.naturalWidth>=256)g.drawImage(atlas,sx*32,sy*32,32,32,x,y,32,32)}
+function foliage(x,y,size,h){const dark=night?'#263f40':'#315c49',mid=night?'#35534b':'#4d8060',light=night?'#527268':'#74a36e';g.fillStyle='rgba(24,42,35,.28)';g.fillRect(x-size*.56,y-3,size*1.2,10);g.fillStyle='#654d3b';g.fillRect(x-5,y-size*.45,10,size*.52);for(let j=0;j<3;j++){let yy=y-size*.86+j*size*.17,ww=size*(.65-j*.11);g.fillStyle=j===0?dark:j===1?mid:light;g.beginPath();g.moveTo(x,yy-size*.29);g.lineTo(x-ww,yy+size*.24);g.lineTo(x-ww*.65,yy+size*.39);g.lineTo(x+ww*.67,yy+size*.39);g.lineTo(x+ww,yy+size*.24);g.closePath();g.fill();g.fillStyle=dark;g.fillRect(x-ww*.7,yy+size*.36,ww*1.4,3)}if(h>.68){g.fillStyle='#b0b980';g.fillRect(x-size*.12,y-size*.82,5,3)}}
+function draw(){
+g.setTransform(1,0,0,1,0,0);g.fillStyle=night?'#243e38':'#729a64';g.fillRect(0,0,c.width,c.height);
+g.setTransform(zoom,0,0,zoom,c.width/2-cx*zoom,c.height/2-cy*zoom);
+for(let y=0;y<H;y+=T)for(let x=0;x<W;x+=T){let h=hash(x/T,y/T),m=hash(x/T,y/T,2);g.fillStyle=night?(h>.62?'#36564a':h>.3?'#314f42':'#2d4b40'):(h>.64?'#769c65':h>.31?'#71975f':'#6d915b');g.fillRect(x,y,T,T);if(h>.52)tile(x,y,h>.84?2:0,0);if(m>.85){g.fillStyle=night?'#536d54':'#94b878';g.fillRect(x+7,y+13,5,2);g.fillRect(x+14,y+11,3,4)}}
+for(let [x,y,r] of [[420,245,145],[1300,350,115],[1300,955,140],[360,940,110]]){g.fillStyle=night?'#39574a':'#86a775';g.beginPath();g.arc(x,y,r,0,Math.PI*2);g.fill()}
+for(let line of [trail,...branches]){path(g,line,52,night?'#4e5846':'#8b8d66');path(g,line,38,night?'#7e7259':'#b59a72');path(g,line,22,night?'#89775d':'#c4a783')}
+for(let y=0;y<H;y+=16)for(let x=0;x<W;x+=16){let h=hash(x/16,y/16,19);if(h>.91&&trailDist(x,y)<26){g.fillStyle=night?'#a0916b':'#d4b58c';g.fillRect(x+3,y+8,5,3)}}
+for(let y=0;y<H;y+=16)for(let x=0;x<W;x+=16){if(water(x+8,y+8)){let edge=!water(x-8,y+8)||!water(x+24,y+8)||!water(x+8,y-8)||!water(x+8,y+24);g.fillStyle=edge?(night?'#386c72':'#61a9a7'):(night?'#285366':'#357f9e');g.fillRect(x,y,16,16);if(hash(x/16,y/16,12)>.87){g.fillStyle=night?'#719e9b':'#a4d2c6';g.fillRect(x+4,y+9,7,2)}}}
+for(let i=0;i<240;i++){let x=30+hash(i,1)*1730,y=30+hash(i,2)*1090,d=trailDist(x,y);if(d<45||water(x,y)||Math.hypot(x-420,y-245)<135||Math.hypot(x-1300,y-955)<115)continue;let h=hash(i,4);foliage(x,y,37+h*30,h)}
+for(let i=0;i<380;i++){let x=hash(i,9)*W,y=hash(i,11)*H,d=trailDist(x,y);if(d<20||water(x,y))continue;let h=hash(i,13);if(h>.69){g.fillStyle=night?'#6d8e72':'#b4c58a';g.fillRect(x,y,3,8);g.fillRect(x-3,y+3,3,4)}else if(h>.47){g.fillStyle=night?'#70826a':'#e7c18d';g.fillRect(x,y,4,4);g.fillStyle='#68835e';g.fillRect(x+1,y+4,2,4)}else{g.fillStyle=night?'#6d8a66':'#3f7450';g.fillRect(x,y,6,3);g.fillRect(x+2,y-3,3,6)}}
+for(let i=0;i<75;i++){let x=hash(i,31)*W,y=hash(i,32)*H;if(trailDist(x,y)<35||water(x,y))continue;g.fillStyle=night?'#576b66':'#9a9e8a';g.fillRect(x,y,9,6);g.fillStyle=night?'#778782':'#c2c0a9';g.fillRect(x+2,y-3,5,3)}
+// Cottage placeholder: use approved game artwork as a scene panel until isolated building sprite exists.
+g.fillStyle=night?'#4d6655':'#9db28a';g.fillRect(323,163,194,149);g.fillStyle='#645342';g.fillRect(352,277,134,11);
+if(cottage.complete&&cottage.naturalWidth){g.save();g.beginPath();g.rect(335,171,170,112);g.clip();g.drawImage(cottage,0,0,cottage.naturalWidth,cottage.naturalHeight,335,171,170,112);g.restore()}
+else{g.fillStyle='#8d8cad';g.fillRect(347,179,145,70);g.fillStyle='#a6b6a4';g.fillRect(358,241,120,44)}
+if(labels){g.font='bold 17px system-ui';g.textAlign='center';for(let p of landmarks){g.fillStyle='rgba(20,37,30,.78)';let w=g.measureText(p.name).width+20;g.fillRect(p.x-w/2,p.y+28,w,27);g.fillStyle='#f4f0d6';g.fillText(p.name,p.x,p.y+47)}}
+if(night){g.fillStyle='rgba(13,23,43,.24)';g.fillRect(0,0,W,H);for(let i=0;i<52;i++){let x=hash(i,41)*W,y=hash(i,42)*H;if(water(x,y))continue;g.fillStyle='rgba(233,231,155,.75)';g.fillRect(x,y,3,3)}}
+}
+function changeZoom(v){zoom=Math.max(.42,Math.min(2.2,zoom*v));draw()}
+document.querySelector('#day').onclick=()=>{night=!night;draw()};document.querySelector('#labels').onclick=()=>{labels=!labels;draw()};document.querySelector('#reset').onclick=()=>{cx=830;cy=520;zoom=.9;draw()};document.querySelector('#zoomIn').onclick=()=>changeZoom(1.2);document.querySelector('#zoomOut').onclick=()=>changeZoom(1/1.2);
+let drag=null;c.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,cx,cy};c.setPointerCapture(e.pointerId)});c.addEventListener('pointermove',e=>{if(!drag)return;let r=c.getBoundingClientRect(),scale=c.width/r.width;cx=Math.max(0,Math.min(W,drag.cx-(e.clientX-drag.x)*scale/zoom));cy=Math.max(0,Math.min(H,drag.cy-(e.clientY-drag.y)*scale/zoom));draw()});c.addEventListener('pointerup',()=>drag=null);c.addEventListener('pointercancel',()=>drag=null);c.addEventListener('wheel',e=>{e.preventDefault();changeZoom(e.deltaY<0?1.12:1/1.12)},{passive:false});draw();
+</script></html>
