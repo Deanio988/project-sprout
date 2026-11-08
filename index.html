@@ -609,6 +609,15 @@ function sproutLargePond(o,night){
    const inside=water(cx,cy),near=water(cx+step,cy)||water(cx-step,cy)||water(cx,cy+step)||water(cx,cy-step);
    if(!inside&&!near)continue;
    if(!inside){
+    // Alpha 84: connected, irregular soil-and-grass transition instead of isolated beige blocks.
+    const seed=(tx*19+ty*31+1009)&15;
+    const north=water(cx,cy-step),south=water(cx,cy+step),west=water(cx-step,cy),east=water(cx+step,cy);
+    ctx.fillStyle=night?'#607d59':'#80a16b';
+    if(north)ctx.fillRect(px+3,py,10,4+(seed%3));
+    if(south)ctx.fillRect(px+3,py+11-(seed%3),10,5+(seed%3));
+    if(west)ctx.fillRect(px,py+3,4+(seed%3),10);
+    if(east)ctx.fillRect(px+11-(seed%3),py+3,5+(seed%3),10);
+    if(seed===7||seed===12){ctx.fillStyle=night?'#657b70':'#a6ac91';ctx.fillRect(px+5,py+8,6,4);}
     // Alpha 87: soften exposed 16px water steps with tiny dry-bank overhangs.
     // Decorative only: no changes to the shared water/collision tile mask.
     const north=water(cx,cy-step),south=water(cx,cy+step),west=water(cx-step,cy),east=water(cx+step,cy);
@@ -624,17 +633,6 @@ function sproutLargePond(o,night){
      if(fringeSeed===3||fringeSeed===11){ctx.fillStyle=light;ctx.fillRect(px+7,py+6,3,2);}
      if(fringeSeed===6){ctx.fillStyle=night?'#84918a':'#b6b9a6';ctx.fillRect(px+9,py+9,5,3);ctx.fillRect(px+10,py+7,3,2);}
     }
-   }
-   if(!inside){
-    // Alpha 84: connected, irregular soil-and-grass transition instead of isolated beige blocks.
-    const seed=(tx*19+ty*31+1009)&15;
-    const north=water(cx,cy-step),south=water(cx,cy+step),west=water(cx-step,cy),east=water(cx+step,cy);
-    ctx.fillStyle=night?'#607d59':'#80a16b';
-    if(north)ctx.fillRect(px+3,py,10,4+(seed%3));
-    if(south)ctx.fillRect(px+3,py+11-(seed%3),10,5+(seed%3));
-    if(west)ctx.fillRect(px,py+3,4+(seed%3),10);
-    if(east)ctx.fillRect(px+11-(seed%3),py+3,5+(seed%3),10);
-    if(seed===7||seed===12){ctx.fillStyle=night?'#657b70':'#a6ac91';ctx.fillRect(px+5,py+8,6,4);}
     continue;
    }
    const edge=!water(cx-step,cy)||!water(cx+step,cy)||!water(cx,cy-step)||!water(cx,cy+step);
