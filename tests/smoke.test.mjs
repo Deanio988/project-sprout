@@ -25,7 +25,7 @@ test('sleeping creature snaps to bed station',()=>assert.match(html,/if\(sleepin
 
 test('stuck movement selects a fresh goal',()=>{assert.match(html,/pet\.stuckTicks>20/);assert.match(html,/pet\.target=null;pet\.commitUntil=0/)});
 
-test('A-star route planning is used for outdoor navigation',()=>{assert.match(html,/function sproutBuildRoute/);assert.match(html,/function sproutNavigate/);assert.match(html,/const next=sproutNavigate\(pet\.x,pet\.y,o\.x,o\.y,pet\.target\)/)});
+test('A-star route planning is used for outdoor navigation',()=>{assert.match(html,/function sproutBuildRoute/);assert.match(html,/function sproutNavigate/);assert.match(html,/const next=sproutNavigate\(pet\.x,pet\.y,destination\.x,destination\.y,pet\.target\)/)});
 
 
 test('sleeping sprite anchors to mattress and breathes',()=>{assert.match(html,/const sleepAnchor=\[125,251\]/);assert.match(html,/Math\.sin\(now\/850\)/)});
