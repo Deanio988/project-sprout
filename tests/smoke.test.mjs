@@ -111,7 +111,7 @@ test('alpha 77 minimap is collapsible and displays world markers without changin
 test('alpha 78 pond approach trail is represented in terrain and minimap',()=>{
  const segment='[720,455],[758,477],[798,468],[826,442],[826,425]';
  assert.equal(html.split(segment).length-1,2);
- assert.match(html,/3\.0\.0-alpha\.80/);
+ assert.match(html,/3\.0\.0-alpha\.81/);
 });
 
 test('alpha 79 pondside clearing and vegetation are rendered without moving water collision',()=>{
@@ -127,4 +127,11 @@ test('alpha 80 encourages pond discovery without overriding survival needs',()=>
  assert.match(html,/visits===0\?Math\.min\(75,28\+pet\.curiosity\*\.47\):visits<3\?18:0/);
  assert.match(html,/'large pond':'Exploring the pond shoreline'/);
  assert.match(html,/let destination=o\.type==='large pond'\?sproutPondApproach/);
+});
+
+test('alpha 81 pond retains shoreline habitat with deeper pixel water',()=>{
+ assert.match(html,/Deep, continuous water body with narrow shallow-water edges/);
+ assert.match(html,/Shallow highlights and dark pixel contours improve water readability in fog/);
+ assert.match(html,/Dry western bank: a distinct pixel clearing/);
+ assert.match(html,/3\.0\.0-alpha\.81/);
 });
