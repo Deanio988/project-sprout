@@ -620,7 +620,6 @@ function sproutLargePond(o,night){
     if(seed===7||seed===12){ctx.fillStyle=night?'#657b70':'#a6ac91';ctx.fillRect(px+5,py+8,6,4);}
     // Alpha 87: soften exposed 16px water steps with tiny dry-bank overhangs.
     // Decorative only: no changes to the shared water/collision tile mask.
-    const north=water(cx,cy-step),south=water(cx,cy+step),west=water(cx-step,cy),east=water(cx+step,cy);
     const fringeSeed=((tx*73)^(ty*137)^0x57)&15;
     const westEntrance=px<880&&py>368&&py<480;
     if(!westEntrance){
